@@ -1,11 +1,22 @@
 class User {
-  constructor(userData) {
+  constructor(userData, i) {
     this.firstName = userData.name.first;
     this.lastName = userData.name.last;
+    this.dob = userData.dob.date;
     this.picture = userData.picture.large;
     this.email = userData.email;
+    this.cellNumber = userData.phone;
+    this.addressStreet = userData.location.street.name;
+    this.addressNumber = userData.location.street.number;
     this.city = userData.location.city;
     this.state = userData.location.state;
+    this.zipCode = userData.location.postcode;
+    this.country = userData.location.country;
+    this.modalActive = false;
+  }
+
+  get birthDay() {
+    return this.dob.slice(0, 10);
   }
 
   /**
@@ -14,9 +25,10 @@ class User {
    */
   generateCard() {
     const div = document.createElement("DIV");
-    div.className = "card";
+    div.classList.add("card");
+    div.user = this;
 
-    const cardHTML = `
+    div.innerHTML = `
       <div class="card-img-container">
         <img 
           class="card-img" 
@@ -37,8 +49,40 @@ class User {
           >${this.city}, ${this.state}</p>
       </div>
     `
-    div.innerHTML = cardHTML;
 
     return div;
   }
+
+    /**
+   * Generates the HTML for the modal box using the user properties
+   * @returns {object} HTML code
+   */
+  generateModal() {
+    const div = document.createElement("DIV");
+    div.className = "modal-container";
+    
+    div.innerHTML = `
+    <div class="modal">
+      <button type="button" id="modal-close-btn" class="modal-close-btn"><strong>X</strong></button>
+      <div class="modal-info-container">
+        <img class="modal-img" src="${this.picture}" alt="profile picture">
+        <h3 id="name" class="modal-name cap">${this.firstName} ${this.lastName}</h3>
+        <p class="modal-text">${this.email}</p>
+        <p class="modal-text cap">${this.city}</p>
+        <hr>
+        <p class="modal-text">${this.cellNumber}</p>
+        <p class="modal-text">${this.addressNumber} ${this.addressStreet}<br>
+          ${this.city}, ${this.state} ${this.zipCode}</p>
+        <p class="modal-text">Birthday: ${this.birthDay}</p>
+      </div>
+    </div>
+      <div class="modal-btn-container">
+        <button type="button" id="modal-prev" class="modal-prev btn">Prev</button>
+        <button type="button" id="modal-next" class="modal-next btn">Next</button>
+      </div>
+    `
+    return div;
+  }
+
+
 }
