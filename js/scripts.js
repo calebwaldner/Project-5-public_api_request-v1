@@ -1,4 +1,15 @@
+// ------------------------------------------
+//  GLOBAL VARIABLES
+// ------------------------------------------
 
+// global variable used to hold current User Object 
+let activeUser = null;
+
+// used to hold all User Objects
+let completeUserList = [];
+
+// search input
+const searchInput = document.getElementById("search-input");
 
 // ------------------------------------------
 //  FETCH
@@ -21,17 +32,16 @@ async function fetchData(url) {
  * * creates User Objects
  * * uses User Objects to populate the Gallery
  */
-fetchData('https://randomuser.me/api/?results=12')
+fetchData('https://randomuser.me/api/?results=12&nat=us')
   .then(dataToLog => { // ! for logging only
     console.log(dataToLog);
     return dataToLog;
   })
   .then(data => createUsers(data.results))
-  .then(dataToLog => { // ! for logging only
-    console.log(dataToLog);
-    return dataToLog;
-  })
-  .then(users => populateGallery(users, document.getElementById("gallery")));
+  .then(users => {
+    completeUserList = users;
+    updateGallery(completeUserList, document.getElementById("gallery"));
+  });
 
 /**
  * Takes a Promise Object and checks for a status of "OK"
@@ -72,7 +82,11 @@ function createUsers(allUsers) {
  * @param {Array} arr - Array of all User Objects
  * @param {Element} div - Parent element to hold user div-cards, the gallery-div
  */
-function populateGallery(arr, div) {
+function updateGallery(arr, div) {
+  while (div.children.length > 0) {
+    div.removeChild(div.lastChild);
+  }
+
   arr.forEach(userObject => {
     div.appendChild(userObject.generateCard());
   })
@@ -81,9 +95,6 @@ function populateGallery(arr, div) {
 // ------------------------------------------
 //  MODAL
 // ------------------------------------------
-
-// global variable used to hold current User Object 
-let activeUser = null;
 
 document.addEventListener("click", e => {
   const clickedUserCard = e.target.closest(".card");
@@ -137,6 +148,44 @@ function exitModal(modalDiv) {
   activeUser = null; // empties global variable
 }
 
+
+// ------------------------------------------
+//  SEARCH
+// ------------------------------------------
+
+document.addEventListener("keydown", e => {
+  if (isValidKey(e)) { 
+    searchInput.focus(); // automatic focus on search box with keystroke
+  }
+});
+
+document.addEventListener("keyup", e => {
+  if (isValidKey(e)) {
+    handleSearch(e);
+  }
+});
+
+function handleSearch(e) {
+  updateGallery(filteredUserList(e.target.value), document.getElementById("gallery"));
+  // run populate gallery function with all user arr
+  // if no results, display message
+
+
+
+}
+
+/**
+ * checks if keystroke is a letter character or the delete key
+ * @param {event} e 
+ */
+const isValidKey = e => /^[\w]\b|\b(backspace)$/m.test(e.key.toLowerCase());// If any single letter a-z (excludes other key values like "tab" and "meta" since those are multi-letter)
+
+/**
+ * Returns a filtered list of users based off the search
+ * @param {string} query - the search query
+ */
+const filteredUserList = query => completeUserList.filter(user => user.fullNameLower.indexOf(query.toLowerCase()) !== -1); 
+// indexOf() uses the query to search the user-name string and returns the index value if query is found within the string, 0 for a result found or -1 if not found. In other words if the search query is found within the user-name string, then the index value of 0 is returned, if it is not found, then the index value of -1 is returned.
 
 
 

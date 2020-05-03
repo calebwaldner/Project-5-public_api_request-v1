@@ -2,6 +2,7 @@ class User {
   constructor(userData, i) {
     this.firstName = userData.name.first;
     this.lastName = userData.name.last;
+    this.fullNameLower = `${this.firstName.toLowerCase()} ${this.lastName.toLowerCase()}`; //used for search
     this.dob = userData.dob.date;
     this.picture = userData.picture.large;
     this.email = userData.email;
