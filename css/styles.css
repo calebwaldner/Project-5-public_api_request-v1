@@ -119,6 +119,12 @@ header h1 {
     text-transform: capitalize;
 }
 
+.no-results-message {
+    font-size: 1.25em;
+    color: rgba(50, 50, 50, 0.9);
+    margin-top: 35px;
+}
+
 
 /* ===================================== 
    Modal

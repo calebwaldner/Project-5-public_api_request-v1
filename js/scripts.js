@@ -8,8 +8,8 @@ let activeUser = null;
 // used to hold all User Objects
 let completeUserList = [];
 
-// search input
 const searchInput = document.getElementById("search-input");
+const galleryDiv = document.getElementById("gallery");
 
 // ------------------------------------------
 //  FETCH
@@ -40,7 +40,7 @@ fetchData('https://randomuser.me/api/?results=12&nat=us')
   .then(data => createUsers(data.results))
   .then(users => {
     completeUserList = users;
-    updateGallery(completeUserList, document.getElementById("gallery"));
+    updateGallery(completeUserList, galleryDiv);
   });
 
 /**
@@ -102,6 +102,8 @@ document.addEventListener("click", e => {
   const modalMainBox = e.target.closest(".modal");
   const modalButtonBox = e.target.closest(".modal-btn-container");
   const activeModal = document.querySelector(".modal-container");
+  const previousButton = e.target.closest("#modal-prev");
+  const nextButton = e.target.closest("#modal-next");
 
   // click outside the modal box to exit
   if (activeUser !== null && !modalMainBox && !modalButtonBox) { // the modal boxes use the closest() method. Closest() looks for the closes element specified from the click target. If the element is not found in relation to the click target, the closest() method returns null. So in this conditional statement, I'm wanting a TRUE if the boxes are null (aka the click wasn't within the border of the modal) 
@@ -118,6 +120,14 @@ document.addEventListener("click", e => {
     exitModal(activeModal);
   }
 
+  if (previousButton) {
+    console.log('previous');
+  }
+
+  if (nextButton) {
+    console.log('next');
+  }
+
 });
 
 /**
@@ -132,7 +142,7 @@ function showModal(userCard) {
     clickedUser.modalActive = true; 
 
     // creates modal box using the User Objects generateModal() method and appends the div inside the gallery.
-    document.getElementById("gallery").appendChild(clickedUser.generateModal());
+    galleryDiv.appendChild(clickedUser.generateModal());
 
     activeUser = userCard.user; // sets the active user to the global variable
   }
@@ -146,6 +156,15 @@ function exitModal(modalDiv) {
   modalDiv.remove();
   activeUser.modalActive = false;
   activeUser = null; // empties global variable
+}
+
+function userScroll() {
+
+  // use filteredUserList()
+
+
+  // need to add event listeners for left right buttons
+
 }
 
 
@@ -166,12 +185,10 @@ document.addEventListener("keyup", e => {
 });
 
 function handleSearch(e) {
-  updateGallery(filteredUserList(e.target.value), document.getElementById("gallery"));
-  // run populate gallery function with all user arr
+  updateGallery(filteredUserList(e.target.value), galleryDiv);
+  
   // if no results, display message
-
-
-
+  showMessageNoResults();
 }
 
 /**
@@ -187,5 +204,19 @@ const isValidKey = e => /^[\w]\b|\b(backspace)$/m.test(e.key.toLowerCase());// I
 const filteredUserList = query => completeUserList.filter(user => user.fullNameLower.indexOf(query.toLowerCase()) !== -1); 
 // indexOf() uses the query to search the user-name string and returns the index value if query is found within the string, 0 for a result found or -1 if not found. In other words if the search query is found within the user-name string, then the index value of 0 is returned, if it is not found, then the index value of -1 is returned.
 
-
+/**
+ * Displays a message if no results are displayed in the gallery.
+ */
+function showMessageNoResults() {
+  const existingMessage = document.getElementById("no-results-message"); // holds element or null if element doesn't exist
+  const message = document.createElement("H2");
+  message.innerText = "No users found...";
+  message.className = "no-results-message";
+  
+  if (galleryDiv.children.length < 1) {
+    galleryDiv.appendChild(message);
+  } else if (galleryDiv.children.length >= 1 && existingMessage) { // including existingMessage variable to insure this runs only if the message already existed because removing a child that doesn't exit throws an error. 
+    galleryDiv.removeChild(document.getElementById(existingMessage));
+  }
+}
 
