@@ -8,6 +8,56 @@
 	box-sizing: border-box;
 }
 
+/* Shout out to Material Designs, which was the inspiration for the dark theme
+    https://material.io/design/color/dark-theme.html */
+:root {
+
+    --body-background: rgba(40, 41, 40, 1);
+    --header-color: rgba(225, 226, 225, 1);
+   
+    --card-text-color: rgba(164, 165, 164, 1);
+    --card-background: rgba(29, 30, 29, 1);
+    --card-border: rgba(56, 57, 56, 1);
+    --card-name-color: rgba(225, 226, 225, 1);
+
+    --no-results-message-color: rgba(225, 226, 225, 1);
+
+    --hover-card-background: rgba(45, 46, 45, 1);
+    --hover-card-border: rgba(254, 255, 254, 1);
+    --hover-card-text-color: rgba(170, 171, 170, 1); 
+    
+    --modal-background: rgba(29, 30, 29, 1);
+    --modal-border: rgba(56, 57, 56, 1);
+    --modal-text-color: rgba(164, 165, 164, 1);
+    --modal-name-color: rgba(225, 226, 225, 1);
+
+    --modal-btn-container-background: rgba(29, 30, 29, 1);
+
+    --modal-btn-container-btn-background: rgba(29, 30, 29, 1);
+    --modal-btn-container-btn-color: rgba(186, 134, 252, 1);
+    --modal-btn-container-border: rgba(56, 57, 56, 1);
+
+    --modal-btn-border: rgba(66, 67, 66, 1);
+
+    --modal-close-btn-background: rgba(29, 30, 29, 1);
+    --modal-close-btn-color: rgba(186, 134, 252, 1);
+    --modal-close-btn-border: rgba(66, 67, 66, 1);
+
+    --hover-card-btn-background: rgba(47, 44, 48, 1);
+    --hover-card-btn-color: rgba(186, 134, 252, 1); 
+
+    --search-submit-input-background: rgba(40, 41, 40, 1);
+    --search-submit-input-border: rgba(121, 122, 121, 1);
+    --search-submit-input-focus-background: rgba(47, 44, 48, 1);
+    --search-submit-input-focus-border: rgba(121, 122, 121, 1);
+
+    --search-input-boarder: rgba(121, 122, 121, 1);
+    --search-input-background: rgba(40, 41, 40, 1);
+    --search-input-active-border: rgba(186, 134, 252, 1);
+    --search-input-color: rgba(164, 165, 164, 1);
+    
+}
+
 html, body {
     width: 100%;
     max-width: 100%;
@@ -16,7 +66,7 @@ html, body {
 body {
     font-family: "Nunito", sans-serif;
     text-align: center;
-    background: rgba(235, 235, 235, 0.9);
+    background: var(--body-background);
 }
 
 header {
@@ -30,36 +80,38 @@ header {
 
 header h1 {
     font-size: 1.25em;
-    color: rgba(50, 50, 50, 0.9);
+    color: var(--header-color);
     margin-top: 35px;
 }
 
 .search-input {
     padding: 0.4rem 1rem;
-    border: 1px solid rgba(200, 200, 200, 0.9);
-    border-radius: 0.25rem 0 0 0.25rem ;
+    border: 1px solid var(--search-input-boarder);
+    border-radius: 0.25rem 0.25rem ;
     max-width: 20rem;
     transition: .4s ease-out;
     outline: none;
+    background-color: var(--search-input-background);
+    color: var(--search-input-color);
 }
 
 .search-input:active, .search-input:hover, .search-input:focus {
-    border: 1px solid rgba(50, 50, 50, 0.9);
+    border: 1px solid var(--search-input-active-border);
 }
 
 .search-submit {
     cursor: pointer;
     height: 33px;
-    background: rgba(245, 245, 245, 0.9);
+    background: var(--search-submit-input-background);
     border-radius: 0 0.25rem 0.25rem 0;
-    border: 1px solid rgba(200, 200, 200, 0.9);
+    border: 1px solid var(--search-submit-input-border);
     transition: .4s ease-out;
     outline: none;
 }
 
 .search-submit:active, .search-submit:hover, .search-submit:focus {
-    background: rgba(255, 255, 255, 0.9);
-    border: 1px solid rgba(50, 50, 50, 0.9);
+    background: var(--search-input-focus-background);
+    border: 1px solid var(--search-input-focus-border);
 }
 
 
@@ -87,9 +139,9 @@ header h1 {
     max-width: 360px;
     margin: 10px 10px 20px;
     padding: 10px;
-    background: rgba(245, 245, 245, 0.9);
+    background: var(--card-background);
     border-radius: 0.25em;
-    border: 1px solid rgba(50, 50, 50, 0.3);
+    border: 1px solid var(--card-border);
     transition: .4s ease-out;
     overflow: hidden;
 }
@@ -106,11 +158,12 @@ header h1 {
 
 .card-name {
     margin: 20px auto 0;
+    color: var(--card-name-color);
 }
 
 .card-text {
     font-size: 0.9em;
-    color: rgba(50, 50, 50, 0.7);
+    color: var(--card-text-color);
     margin: 7px auto;
     transition: .4s ease-out;
 }
@@ -121,7 +174,7 @@ header h1 {
 
 .no-results-message {
     font-size: 1.25em;
-    color: rgba(50, 50, 50, 0.9);
+    color: var(--no-results-message-color);
     margin-top: 35px;
 }
 
@@ -146,9 +199,9 @@ header h1 {
     min-height: 415px;
     margin: 10px auto auto;
     padding-bottom: 15px;
-    background: rgba(255, 255, 255, 1);
+    background: var(--modal-background);
     border-radius: 0.25em;
-    border: 1px solid rgba(100, 100, 100, 0.3);
+    border: 1px solid var(--modal-border);
     transition: .4s ease-out;
 }
 
@@ -157,11 +210,11 @@ header h1 {
     top: 15px;
     right: 15px;
     cursor: pointer;
-    color: rgba(255, 255, 255, 0.9);
-    background: rgba(0, 0, 0, 0.8);
+    color: var(--modal-close-btn-color);
+    background: var(--modal-close-btn-background);
     outline: none;
     border-radius: 0.25em;
-    border: 1px solid rgba(50, 50, 50, 0.3);
+    border: 1px solid var(--modal-close-btn-border);
 }
 
 .modal-img {
@@ -172,10 +225,11 @@ header h1 {
 
 .modal-name {
     margin-bottom: 5px;
+    color: var(--modal-name-color);
 }
 
 .modal-text {
-    color: rgba(50, 50, 50, 0.7);
+    color: var(--modal-text-color);
     margin: 10px;
 }
 
@@ -194,9 +248,9 @@ header h1 {
     max-width: 420px;
     padding: 10px 15px 15px;;
     margin: 10px auto auto;
-    background: rgba(255, 255, 255, 1);
+    background: var(--modal-btn-container-background);
     border-radius: 0.25em;
-    border: 1px solid rgba(100, 100, 100, 0.3);
+    border: 1px solid var(--modal-btn-container-border);
 }
 
 
@@ -205,12 +259,17 @@ header h1 {
     cursor: pointer;
     font-size: 0.85em;
     text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.9);
+    color: var(--modal-btn-container-btn-color);
     padding: 0.75em 1.5em;
-    background: rgba(0, 0, 0, 0.8);
+    background: var(--modal-btn-container-btn-background);
     border-radius: 0.35em;
     transition: .4s ease-out;
     outline: none;
+  }
+
+  .btn {
+      border-color: var(--modal-btn-border);
+      transition: .4s ease-out;
   }
   
 
@@ -254,16 +313,16 @@ header h1 {
 @media (min-width: 1024px) {
 
     .card:hover {
-        background: rgba(255, 255, 255, 1);
-        border: 1px solid rgba(50, 50, 50, 0.9);
+        background: var(--hover-card-background);
+        border: 1px solid var(--hover-card-border);
     }
 
     .card:hover .card-text {
-        color: rgba(25, 25, 25, 1); 
+        color: var(--hover-card-text-color); 
     }
 
     .btn:hover {
-        background: rgba(255, 255, 255, 1);
-        color: rgba(25, 25, 25, 1); 
+        background: var(--hover-card-btn-background);
+        color: var(--hover-card-btn-color); 
     }
 }

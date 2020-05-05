@@ -58,13 +58,13 @@ class User {
    * Generates the HTML for the modal box using the user properties
    * @returns {object} HTML code
    */
-  generateModal() {
+  generateModal(listLength) {
     const div = document.createElement("DIV");
     div.className = "modal-container";
     
     div.innerHTML = `
     <div class="modal">
-      <button type="button" id="modal-close-btn" class="modal-close-btn"><strong>X</strong></button>
+      <button type="button" id="modal-close-btn" class="modal-close-btn btn"><strong>X</strong></button>
       <div class="modal-info-container">
         <img class="modal-img" src="${this.picture}" alt="profile picture">
         <h3 id="name" class="modal-name cap">${this.firstName} ${this.lastName}</h3>
@@ -77,11 +77,18 @@ class User {
         <p class="modal-text">Birthday: ${this.birthDay}</p>
       </div>
     </div>
-      <div class="modal-btn-container">
-        <button type="button" id="modal-prev" class="modal-prev btn">Prev</button>
-        <button type="button" id="modal-next" class="modal-next btn">Next</button>
-      </div>
     `
+
+    // div holding scroll button html
+    const scrollHTMLDiv = document.createElement("DIV");
+    scrollHTMLDiv.className = "modal-btn-container";
+    scrollHTMLDiv.innerHTML = `
+      <button type="button" id="modal-prev" class="modal-prev btn">Prev</button>
+      <button type="button" id="modal-next" class="modal-next btn">Next</button>
+    `
+    // if the list isn’t over 1, scroll buttons are not included
+    if (listLength > 1) {div.appendChild(scrollHTMLDiv)}
+
     return div;
   }
 

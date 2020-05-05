@@ -112,7 +112,8 @@ document.addEventListener("click", e => {
 
   // modal card click
   if (clickedUserCard) {
-    showModal(clickedUserCard);
+    const clickedUser = clickedUserCard.user;
+    showModal(clickedUser);
   }
 
   // modal exit button click
@@ -121,11 +122,11 @@ document.addEventListener("click", e => {
   }
 
   if (previousButton) {
-    console.log('previous');
+    userScroll(-1, activeModal);
   }
 
   if (nextButton) {
-    console.log('next');
+    userScroll(1, activeModal);
   }
 
 });
@@ -134,17 +135,18 @@ document.addEventListener("click", e => {
  * Takes the card div with the user property that holds the User Object and uses the User Object to populate a modal box.
  * @param {element} userCard - the ".card" div with the property containing the user Object
  */
-function showModal(userCard) {
-  const clickedUser = userCard.user;
+function showModal(user) {
+  const currentListLength = filteredUserList(searchInput.value).length;
 
   // if no active modal boxes
-  if (clickedUser.modalActive === false) { 
-    clickedUser.modalActive = true; 
+  if (user.modalActive === false) { 
+    user.modalActive = true; 
 
     // creates modal box using the User Objects generateModal() method and appends the div inside the gallery.
-    galleryDiv.appendChild(clickedUser.generateModal());
-
-    activeUser = userCard.user; // sets the active user to the global variable
+    galleryDiv.appendChild(user.generateModal(currentListLength));
+    
+    // sets the active user to the global variable
+    activeUser = user; 
   }
 }
 
@@ -158,13 +160,25 @@ function exitModal(modalDiv) {
   activeUser = null; // empties global variable
 }
 
-function userScroll() {
+/**
+ * Scrolls between users by closing the current modal box and opening a new one with the next user, depending on the number to scroll by.
+ * @param {number} num - number to scroll by
+ * @param {*} activeModal - current modal box to close
+ */
+function userScroll(num, activeModal) {
+  const activeArr = filteredUserList(searchInput.value);
+  const activeIndex = activeArr.findIndex(user => user.modalActive);
+  
+  // gets the next index number. loops back to beginning or end of list if the nextIndex is outside the range of the activeArr length.
+  const nextIndex = () => { 
+    let nextNum = num + activeIndex;
+    if (nextNum > activeArr.length - 1) {return 0}
+    else if (nextNum < 0) {return activeArr.length - 1}
+    else {return num + activeIndex}
+  }
 
-  // use filteredUserList()
-
-
-  // need to add event listeners for left right buttons
-
+  exitModal(activeModal);
+  showModal(activeArr[nextIndex()]); // passes the next user out of the activeArr using the nextIndex()
 }
 
 
@@ -173,7 +187,12 @@ function userScroll() {
 // ------------------------------------------
 
 document.addEventListener("keydown", e => {
+  const activeModal = document.querySelector(".modal-container");
+
   if (isValidKey(e)) { 
+    
+    if (activeUser !== null) {exitModal(activeModal)} // closes open modal box 
+    
     searchInput.focus(); // automatic focus on search box with keystroke
   }
 });
@@ -184,6 +203,10 @@ document.addEventListener("keyup", e => {
   }
 });
 
+/**
+ * Handles updating the gallery in real time and displaying message if no results are returned.
+ * @param {Event} e 
+ */
 function handleSearch(e) {
   updateGallery(filteredUserList(e.target.value), galleryDiv);
   
@@ -192,7 +215,7 @@ function handleSearch(e) {
 }
 
 /**
- * checks if keystroke is a letter character or the delete key
+ * Checks if keystroke is a letter character or the delete key
  * @param {event} e 
  */
 const isValidKey = e => /^[\w]\b|\b(backspace)$/m.test(e.key.toLowerCase());// If any single letter a-z (excludes other key values like "tab" and "meta" since those are multi-letter)
@@ -201,7 +224,7 @@ const isValidKey = e => /^[\w]\b|\b(backspace)$/m.test(e.key.toLowerCase());// I
  * Returns a filtered list of users based off the search
  * @param {string} query - the search query
  */
-const filteredUserList = query => completeUserList.filter(user => user.fullNameLower.indexOf(query.toLowerCase()) !== -1); 
+const filteredUserList = (query = '') => completeUserList.filter(user => user.fullNameLower.indexOf(query.toLowerCase()) !== -1); 
 // indexOf() uses the query to search the user-name string and returns the index value if query is found within the string, 0 for a result found or -1 if not found. In other words if the search query is found within the user-name string, then the index value of 0 is returned, if it is not found, then the index value of -1 is returned.
 
 /**
@@ -213,6 +236,7 @@ function showMessageNoResults() {
   message.innerText = "No users found...";
   message.className = "no-results-message";
   
+  // removes next and previous buttons if list is only 1 (or index 0)
   if (galleryDiv.children.length < 1) {
     galleryDiv.appendChild(message);
   } else if (galleryDiv.children.length >= 1 && existingMessage) { // including existingMessage variable to insure this runs only if the message already existed because removing a child that doesn't exit throws an error. 
