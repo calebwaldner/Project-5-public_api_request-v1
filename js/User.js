@@ -6,7 +6,7 @@ class User {
     this.dob = userData.dob.date;
     this.picture = userData.picture.large;
     this.email = userData.email;
-    this.cellNumber = userData.phone;
+    this._cellNumber = userData.phone;
     this.addressStreet = userData.location.street.name;
     this.addressNumber = userData.location.street.number;
     this.city = userData.location.city;
@@ -17,7 +17,15 @@ class User {
   }
 
   get birthDay() {
-    return this.dob.slice(0, 10);
+    const date = this.dob.slice(0, 10).replace(/[-]/g, "");
+    const year = date.slice(0, 4);
+    const month = date.slice(4, 6);
+    const day = date.slice(6, 8);
+    return `${month}/${day}/${year}`
+  }
+
+  get cellNumber() {
+    return this._cellNumber.replace("-", ' ');
   }
 
   /**
